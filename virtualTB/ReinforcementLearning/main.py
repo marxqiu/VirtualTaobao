@@ -30,6 +30,7 @@ class ReplayMemory(object):
         """Saves a transition."""
         if len(self.memory) < self.capacity:
             self.memory.append(None)
+        #use the nametuple Transition to save the last [capacity] transition
         self.memory[self.position] = Transition(*args)
         self.position = (self.position + 1) % self.capacity
 
@@ -82,7 +83,7 @@ for i_episode in range(100000):
 
     episode_reward = 0
     while True:
-        action = agent.select_action(state, ounoise, param_noise)
+        action = agent.select_action(state, ounoise, param_noise)#ounoise is action noise
         next_state, reward, done, _ = env.step(action.numpy()[0])
         total_numsteps += 1
         episode_reward += reward
@@ -101,6 +102,7 @@ for i_episode in range(100000):
                 transitions = memory.sample(128)
                 batch = Transition(*zip(*transitions))
 
+                #use the memory to update the model
                 value_loss, policy_loss = agent.update_parameters(batch)
 
                 updates += 1
@@ -111,6 +113,7 @@ for i_episode in range(100000):
     if i_episode % 10 == 0:
         episode_reward = 0
         episode_step = 0
+        #evaluate the performance by 50 episodes
         for i in range(50):
             state = torch.Tensor([env.reset()])
             while True:

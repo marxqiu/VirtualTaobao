@@ -12,6 +12,7 @@ From: https://github.com/ikostrikov/pytorch-ddpg-naf
 
 def soft_update(target, source, tau):
     for target_param, param in zip(target.parameters(), source.parameters()):
+        #linear combination
         target_param.data.copy_(target_param.data * (1.0 - tau) + param.data * tau)
 
 def hard_update(target, source):
@@ -47,6 +48,7 @@ class Actor(nn.Module):
     def __init__(self, hidden_size, num_inputs, action_space):
         super(Actor, self).__init__()
         self.action_space = action_space
+        #get shape of action space
         num_outputs = action_space.shape[0]
 
         self.linear1 = nn.Linear(num_inputs, hidden_size)
@@ -131,6 +133,7 @@ class DDPG(object):
         self.actor.train()
         mu = mu.data
 
+        #purturb action 
         if action_noise is not None:
             mu += torch.Tensor(action_noise.noise())
 
