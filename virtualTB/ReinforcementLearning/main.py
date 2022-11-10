@@ -68,6 +68,7 @@ torch.manual_seed(0)
 
 agent = DDPG(gamma = 0.95, tau = 0.001, hidden_size = 128,
                     num_inputs = env.observation_space.shape[0], action_space = env.action_space)
+                    #91 observation space, 27 action space
 
 memory = ReplayMemory(1000000)
 
