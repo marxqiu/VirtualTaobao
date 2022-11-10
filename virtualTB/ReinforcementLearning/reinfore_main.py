@@ -2,12 +2,11 @@ import argparse, math, os
 import numpy as np
 import gym
 from gym import wrappers
-import VirtualTB
+import virtualTB
 
 import torch
 from torch.autograd import Variable
 import torch.nn.utils as utils
-from reinforce_continuous import REINFORCE
 
 
 
