@@ -57,6 +57,7 @@ class Actor(nn.Module):
         self.linear2 = nn.Linear(hidden_size, hidden_size)
         self.ln2 = nn.LayerNorm(hidden_size)
 
+        #output the same number of dimension for action
         self.mu = nn.Linear(hidden_size, num_outputs)
         self.mu.weight.data.mul_(0.1)
         self.mu.bias.data.mul_(0.1)
@@ -133,10 +134,11 @@ class DDPG(object):
         self.actor.train()
         mu = mu.data
 
-        #purturb action 
+        #purturb action for exploration
         if action_noise is not None:
             mu += torch.Tensor(action_noise.noise())
 
+        #mu is normalized to -1 to 1, clamp after adding noise
         return mu.clamp(-1, 1)
 
 
