@@ -8,7 +8,7 @@ import torch
 from torch.autograd import Variable
 import torch.nn.utils as utils
 
-
+from reinforce_continuous import REINFORCE
 
 
 env = gym.make('VirtualTB-v0')
@@ -30,7 +30,7 @@ for i_episode in range(10000):
 
     entropies = []
     log_probs = []
-    epsisode_rewards = []
+    episode_rewards = []
     while True:
         action, log_prob, entropy = agent.select_action(state)
         action = action.cpu()
@@ -39,15 +39,15 @@ for i_episode in range(10000):
 
         entropies.append(entropy)
         log_probs.append(log_prob)
-        epsisode_rewards.append(reward)
+        episode_rewards.append(reward)
         state = torch.Tensor([next_state])
 
         if done:
             break
 
-    agent.update_parameters(epsisode_rewards, log_probs, entropies, 0.99)
+    agent.update_parameters(episode_rewards, log_probs, entropies, 0.99)
 
-    rewards.append(np.sum(episode_reward))
+    rewards.append(np.sum(episode_rewards))
     if i_episode % 10 == 0:
         episode_reward = 0
         episode_step = 0
